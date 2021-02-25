@@ -14,8 +14,8 @@ use crate::{
         screen::Screen,
         xconnection::{
             Atom, ClientAttr, ClientConfig, ClientEventMask, ClientMessage, ClientMessageKind,
-            Prop, Result, WmHints, WmNormalHints, XAtomQuerier, XClientConfig, XClientHandler,
-            XClientProperties, XConn, XEvent, XEventHandler, XState, Xid,
+            Prop, Result, WindowAttributes, WmHints, WmNormalHints, XAtomQuerier, XClientConfig,
+            XClientHandler, XClientProperties, XConn, XError, XEvent, XEventHandler, XState, Xid,
         },
     },
     x11rb::{atom::Atoms, X11rbError},
@@ -30,7 +30,7 @@ use x11rb::{
         xproto::{
             AtomEnum, ButtonIndex, ChangeWindowAttributesAux, ClientMessageData,
             ClientMessageEvent, ConfigureWindowAux, ConnectionExt as _, CreateWindowAux, EventMask,
-            Grab, GrabMode, InputFocus, ModMask, PropMode, StackMode, WindowClass,
+            Grab, GrabMode, InputFocus, MapState, ModMask, PropMode, StackMode, WindowClass,
             CLIENT_MESSAGE_EVENT,
         },
     },
@@ -120,7 +120,7 @@ impl<C: Connection> XAtomQuerier for X11rbConnection<C> {
 
         // Nope, ask the X11 server
         let reply = self.conn.get_atom_name(atom)?.reply()?;
-        let name = String::from_utf8(reply.name).map_err(|err| X11rbError::from(err))?;
+        let name = String::from_utf8(reply.name).map_err(X11rbError::from)?;
         Ok(name)
     }
 
@@ -171,6 +171,39 @@ impl<C: Connection> XClientConfig for X11rbConnection<C> {
         }
         self.conn.change_window_attributes(id, &aux)?;
         Ok(())
+    }
+
+    fn get_window_attributes(&self, id: Xid) -> Result<WindowAttributes> {
+        let win_attrs = self.conn.get_window_attributes(id)?.reply()?;
+        let override_redirect = win_attrs.override_redirect;
+        let map_state = match win_attrs.map_state {
+            MapState::UNMAPPED => crate::core::xconnection::MapState::Unmapped,
+            MapState::UNVIEWABLE => crate::core::xconnection::MapState::UnViewable,
+            MapState::VIEWABLE => crate::core::xconnection::MapState::Viewable,
+            _ => {
+                return Err(XError::Raw(format!(
+                    "invalid map state: {:?}",
+                    win_attrs.map_state
+                )))
+            }
+        };
+        let window_class = match win_attrs.class {
+            WindowClass::COPY_FROM_PARENT => crate::core::xconnection::WindowClass::CopyFromParent,
+            WindowClass::INPUT_OUTPUT => crate::core::xconnection::WindowClass::InputOutput,
+            WindowClass::INPUT_ONLY => crate::core::xconnection::WindowClass::InputOnly,
+            _ => {
+                return Err(XError::Raw(format!(
+                    "invalid window class: {:?}",
+                    win_attrs.class
+                )))
+            }
+        };
+
+        Ok(WindowAttributes::new(
+            override_redirect,
+            map_state,
+            window_class,
+        ))
     }
 }
 
@@ -225,7 +258,7 @@ impl<C: Connection> XClientProperties for X11rbConnection<C> {
             "STRING" | "UTF8_STRING" => Prop::UTF8String(
                 // FIXME: I think this should check prop.format == 8, but penrose::xcb does not
                 String::from_utf8(r.value)
-                    .map_err(|e| X11rbError::from(e))?
+                    .map_err(X11rbError::from)?
                     .trim_matches('\0')
                     .split('\0')
                     .map(|s| s.to_string())
