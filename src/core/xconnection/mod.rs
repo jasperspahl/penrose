@@ -308,6 +308,22 @@ pub trait XClientProperties {
             },
         }
     }
+
+    /// Determine whether the target client should be tiled or allowed to float
+    fn client_should_float(&self, id: Xid, floating_classes: &[&str]) -> bool {
+        if let Ok(Prop::UTF8String(strs)) = self.get_prop(id, Atom::WmClass.as_ref()) {
+            if strs.iter().any(|c| floating_classes.contains(&c.as_ref())) {
+                return true;
+            }
+        }
+
+        let float_types: Vec<&str> = AUTO_FLOAT_WINDOW_TYPES.iter().map(|a| a.as_ref()).collect();
+        if let Ok(Prop::Atom(atoms)) = self.get_prop(id, Atom::NetWmWindowType.as_ref()) {
+            atoms.iter().any(|a| float_types.contains(&a.as_ref()))
+        } else {
+            false
+        }
+    }
 }
 
 /// Modifying X client config and attributes
@@ -525,22 +541,6 @@ pub trait XConn:
         self.change_prop(id, Atom::NetWmDesktop.as_ref(), Prop::Cardinal(wix as u32))
     }
 
-    /// Determine whether the target client should be tiled or allowed to float
-    fn client_should_float(&self, id: Xid, floating_classes: &[&str]) -> bool {
-        if let Ok(Prop::UTF8String(strs)) = self.get_prop(id, Atom::WmClass.as_ref()) {
-            if strs.iter().any(|c| floating_classes.contains(&c.as_ref())) {
-                return true;
-            }
-        }
-
-        let float_types: Vec<&str> = AUTO_FLOAT_WINDOW_TYPES.iter().map(|a| a.as_ref()).collect();
-        if let Ok(Prop::Atom(atoms)) = self.get_prop(id, Atom::NetWmWindowType.as_ref()) {
-            atoms.iter().any(|a| float_types.contains(&a.as_ref()))
-        } else {
-            false
-        }
-    }
-
     /// Check to see if this client is one that we should be handling or not
     #[tracing::instrument(level = "trace", skip(self))]
     fn is_managed_client(&self, id: Xid) -> bool {
@@ -559,7 +559,7 @@ pub trait XConn:
         }
 
         trace!("unable to find type: defaulting to manage");
-        return true;
+        true
     }
 
     /// The subset of active clients that are considered managed by penrose
@@ -569,7 +569,7 @@ pub trait XConn:
             .into_iter()
             .filter(|&id| {
                 let attrs_ok = self.get_window_attributes(id).map_or(true, |a| {
-                    !a.override_redirect && a.map_state == MapState::Viewable
+                    !a.override_redirect && a.window_class == WindowClass::InputOutput
                 });
                 attrs_ok && self.is_managed_client(id)
             })

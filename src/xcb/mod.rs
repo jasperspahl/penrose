@@ -152,8 +152,8 @@ pub enum XcbError {
     X11Error(u16, u8, u32, u8, u16),
 
     /// Wrapper around low level XCB C API errors
-    #[error("Error making xcb query: {0}")]
-    XcbGeneric(#[from] ::xcb::Error<::xcb::ffi::base::xcb_generic_error_t>),
+    #[error("Error making xcb query: {0:?}")]
+    XcbKnown(XErrorCode),
 
     /// Error in using the pango API
     #[cfg(feature = "xcb_draw")]
@@ -168,6 +168,58 @@ pub enum XcbError {
     /// A user specified mouse binding contained an invalid button
     #[error("Unknown mouse button: {0}")]
     UnknownMouseButton(u8),
+
+    /// Wrapper around low level XCB C API errors
+    #[error("Unknown error making xcb query: error_code={0} response_type={1}")]
+    XcbUnknown(u8, u8),
+}
+
+fn from_error_code(code: u8, response_type: u8) -> XcbError {
+    match code {
+        1..=11 => XcbError::XcbKnown(unsafe { std::mem::transmute(code) }),
+        _ => XcbError::XcbUnknown(code, response_type),
+    }
+}
+
+impl From<::xcb::GenericError> for XcbError {
+    fn from(raw: ::xcb::GenericError) -> Self {
+        from_error_code(raw.error_code(), raw.response_type())
+    }
+}
+
+impl From<&::xcb::GenericError> for XcbError {
+    fn from(raw: &::xcb::GenericError) -> Self {
+        from_error_code(raw.error_code(), raw.response_type())
+    }
+}
+
+/// Base X11 error codes taken from /usr/include/X11/X.h (line 347)
+#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq, Ord, PartialOrd)]
+pub enum XErrorCode {
+    /// bad request code
+    BadRequest = 1,
+    /// int parameter out of range
+    BadValue = 2,
+    /// parameter not a Window
+    BadWindow = 3,
+    /// parameter not a Pixmap
+    BadPixmap = 4,
+    /// parameter not an Atom
+    BadAtom = 5,
+    /// parameter not a Cursor
+    BadCursor = 6,
+    /// parameter not a Font
+    BadFont = 7,
+    /// parameter mismatch
+    BadMatch = 8,
+    /// parameter not a Pixmap or Window
+    BadDrawable = 9,
+    /// depending on context:
+    ///   - key/button already grabbed
+    ///   - attempt to free an illegal cmap entry
+    ///   - attempt to store into a read-only color map entry.
+    ///   - attempt to modify the access control list from other than the local host.
+    BadAccess = 10,
 }
 
 #[doc(hidden)]
@@ -251,7 +303,7 @@ macro_rules! __xcb_impl_xeventhandler {
             }
 
             fn build_client_event(&self, kind: ClientMessageKind) -> $crate::core::xconnection::Result<ClientMessage> {
-                        Ok(self.api.build_client_event(kind)?)
+                self.api.build_client_event(kind)
             }
         }
     }
@@ -287,7 +339,12 @@ macro_rules! __xcb_impl_xclientproperties {
     { $struct:ident } => {
         impl $crate::core::xconnection::XClientProperties for $struct {
             fn get_prop(&self, id: Xid, name: &str) -> $crate::core::xconnection::Result<Prop> {
-                Ok(self.api.get_prop(id, name)?)
+                match self.api.get_prop(id, name) {
+                    Err(XcbError::XcbKnown($crate::xcb::XErrorCode::BadAtom)) => {
+                        Err($crate::core::xconnection::XError::MissingProperty(name.into(), id))
+                    },
+                    other => Ok(other?),
+                }
             }
 
             fn list_props(&self, id: Xid) -> $crate::core::xconnection::Result<Vec<String>> {
