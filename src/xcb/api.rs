@@ -6,12 +6,13 @@ use crate::{
         helpers::spawn_for_output,
         screen::Screen,
         xconnection::{
-            Atom, ClientAttr, ClientConfig, ClientEventMask, ClientMessage, ClientMessageKind,
-            ConfigureEvent, ExposeEvent, MapState, PointerChange, Prop, PropertyEvent,
-            WindowAttributes, WindowClass, WmHints, WmNormalHints, XAtomQuerier, XEvent, Xid,
+            Atom, ClientAttr, ClientConfig, ClientEventMask, ClientMessage, ClientMessageData,
+            ClientMessageKind, ConfigureEvent, ExposeEvent, MapState, PointerChange, Prop,
+            PropertyEvent, WindowAttributes, WindowClass, WindowState, WmHints, WmNormalHints,
+            XAtomQuerier, XEvent, Xid,
         },
     },
-    xcb::{Result, XcbError, XcbGenericEvent},
+    xcb::{Result, XErrorCode, XcbError, XcbGenericEvent},
 };
 use strum::*;
 
@@ -431,6 +432,11 @@ impl Api {
                 }))
             }
 
+            xcb::FOCUS_IN => {
+                let e: &xcb::FocusInEvent = unsafe { xcb::cast_event(&event) };
+                Some(XEvent::FocusIn(e.event()))
+            }
+
             xcb::DESTROY_NOTIFY => {
                 let e: &xcb::DestroyNotifyEvent = unsafe { xcb::cast_event(&event) };
                 Some(XEvent::Destroy(e.window()))
@@ -478,28 +484,33 @@ impl Api {
                 }))
             }
 
+            xcb::UNMAP_NOTIFY => {
+                let e: &xcb::UnmapNotifyEvent = unsafe { xcb::cast_event(&event) };
+                Some(XEvent::UnmapNotify(e.window()))
+            }
+
             xcb::CLIENT_MESSAGE => {
                 let e: &xcb::ClientMessageEvent = unsafe { xcb::cast_event(&event) };
                 xcb::xproto::get_atom_name(&self.conn, e.type_())
                     .get_reply()
                     .map_err(XcbError::from)
                     .and_then(|a| {
-                        ClientMessage::try_from_data(
+                        Ok(ClientMessage::new(
                             e.window(),
                             ClientEventMask::NoEventMask,
                             a.name(),
-                            &match e.format() {
-                                8 => cast_slice!(e.data().data8(), u32),
-                                16 => cast_slice!(e.data().data16(), u32),
-                                32 => e.data().data32().to_vec(),
+                            match e.format() {
+                                8 => ClientMessageData::try_from(e.data().data8()),
+                                16 => ClientMessageData::try_from(e.data().data16()),
+                                32 => ClientMessageData::try_from(e.data().data32()),
                                 _ => unreachable!(
                                     "ClientMessageEvent.format should really be an enum..."
                                 ),
-                            },
-                        )
-                        .map_err(|e| XcbError::Raw(format!("Invalid client message data: {}", e)))
-                        .map(XEvent::ClientMessage)
+                            }
+                            .map_err(|_| XcbError::InvalidClientMessage(e.format()))?,
+                        ))
                     })
+                    .map(XEvent::ClientMessage)
                     .ok()
             }
 
@@ -616,6 +627,24 @@ impl Api {
         };
 
         Ok(xcb::change_property_checked(&self.conn, mode, id, a, ty, 32, &data).request_check()?)
+    }
+
+    /// Set the target client's WM_STATE
+    pub fn set_client_state(&self, id: Xid, wm_state: WindowState) -> Result<()> {
+        let mode = xcb::PROP_MODE_REPLACE as u8;
+        let a = self.known_atom(Atom::WmState);
+        let state = match wm_state {
+            WindowState::Withdrawn => 0,
+            WindowState::Normal => 1,
+            WindowState::Iconic => 3,
+        };
+
+        let cookie = xcb::change_property_checked(&self.conn, mode, id, a, a, 32, &[state]);
+        Ok(match cookie.request_check().map_err(XcbError::from) {
+            // The window is already gone
+            Err(XcbError::XcbKnown(XErrorCode::BadWindow)) => (),
+            other => other?,
+        })
     }
 
     /// Create a new client window
@@ -746,7 +775,7 @@ impl Api {
 
     /// Send an event to a client
     pub fn send_client_event(&self, msg: ClientMessage) -> Result<()> {
-        let (dtype, d) = (self.atom(&msg.dtype)?, msg.data());
+        let (dtype, d) = (self.atom(&msg.dtype)?, msg.data().as_u32());
         let data = xcb::ClientMessageData::from_data32([d[0], d[1], d[2], d[3], d[4]]);
         let event = xcb::ClientMessageEvent::new(32, msg.id, dtype, data);
         let mask = match msg.mask {

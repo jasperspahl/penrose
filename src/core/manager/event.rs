@@ -41,6 +41,8 @@ pub enum EventAction {
     DestroyClient(Xid),
     /// Screens should be redetected
     DetectScreens,
+    /// A client should have focus
+    FocusIn(Xid),
     /// A new X window needs to be mapped
     MapWindow(Xid),
     /// A client is requesting to be moved: honoured if the client is floating
@@ -59,6 +61,8 @@ pub enum EventAction {
     ToggleClientFullScreen(Xid, bool),
     /// An unknown property was changed on an X window
     UnknownPropertyChange(Xid, String, bool),
+    /// A window is becoming unmapped
+    Unmap(Xid),
 }
 
 pub(super) fn process_next_event<X>(event: XEvent, state: WmState<'_, X>) -> Vec<EventAction>
@@ -69,6 +73,7 @@ where
         // Direct 1-n mappings of XEvents -> EventActions
         XEvent::Destroy(id) => vec![EventAction::DestroyClient(id)],
         XEvent::Expose(_) => vec![], // FIXME: work out if this needs handling in the WindowManager
+        XEvent::FocusIn(id) => vec![EventAction::FocusIn(id)],
         XEvent::KeyPress(code) => vec![EventAction::RunKeyBinding(code)],
         XEvent::Leave(p) => vec![
             EventAction::ClientFocusLost(p.id),
@@ -77,6 +82,7 @@ where
         XEvent::MouseEvent(evt) => vec![EventAction::RunMouseBinding(evt)],
         XEvent::RandrNotify => vec![EventAction::DetectScreens],
         XEvent::ScreenChange => vec![EventAction::SetScreenFromPoint(None)],
+        XEvent::UnmapNotify(id) => vec![EventAction::Unmap(id)],
 
         // Require processing based on current WindowManager state
         XEvent::ClientMessage(msg) => process_client_message(state, msg),
@@ -106,11 +112,11 @@ where
 
     match Atom::from_str(&msg.dtype) {
         Ok(Atom::NetActiveWindow) => vec![EventAction::SetActiveClient(msg.id)],
-        Ok(Atom::NetCurrentDesktop) => vec![EventAction::SetActiveWorkspace(data[0] as usize)],
-        Ok(Atom::NetWmDesktop) => vec![EventAction::ClientToWorkspace(msg.id, data[0] as usize)],
-        Ok(Atom::NetWmState) if is_fullscreen(&data[1..3]) => {
+        Ok(Atom::NetCurrentDesktop) => vec![EventAction::SetActiveWorkspace(data.as_usize()[0])],
+        Ok(Atom::NetWmDesktop) => vec![EventAction::ClientToWorkspace(msg.id, data.as_usize()[0])],
+        Ok(Atom::NetWmState) if is_fullscreen(&data.as_u32()[1..3]) => {
             // _NET_WM_STATE_ADD == 1, _NET_WM_STATE_TOGGLE == 2
-            let should_fullscreen = [1, 2].contains(&data[0]);
+            let should_fullscreen = [1, 2].contains(&data.as_usize()[0]);
             vec![EventAction::ToggleClientFullScreen(
                 msg.id,
                 should_fullscreen,

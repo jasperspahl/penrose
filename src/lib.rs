@@ -119,13 +119,13 @@
 //! [14]: https://xcb.freedesktop.org/
 //! [15]: https://www.rust-lang.org
 #![warn(
-    broken_intra_doc_links,
-    clippy::all,
-    missing_debug_implementations,
+    clippy::complexity,
+    clippy::correctness,
+    clippy::style,
     future_incompatible,
+    missing_debug_implementations,
     missing_docs,
-    // missing_doc_code_examples,
-    rust_2018_idioms,
+    rust_2018_idioms
 )]
 #![allow(clippy::too_many_arguments, clippy::clippy::borrowed_box)]
 #![doc(
