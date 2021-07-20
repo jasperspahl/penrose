@@ -2,22 +2,34 @@
 /// messages to penrose actions is done.
 use crate::core::{
     bindings::{KeyCode, MouseEvent},
-    client::Client,
     data_types::{Point, Region},
+    hooks::HookName,
+    manager::{clients::Clients, WindowManager},
     xconnection::{
         Atom, ClientMessage, ConfigureEvent, PointerChange, PropertyEvent, XConn, XEvent, Xid,
     },
 };
 
-use std::{collections::HashMap, str::FromStr};
+use std::str::FromStr;
 
 pub(super) struct WmState<'a, X>
 where
     X: XConn,
 {
-    pub(super) conn: &'a X,
-    pub(super) client_map: &'a HashMap<Xid, Client>,
-    pub(super) focused_client: Option<Xid>,
+    conn: &'a X,
+    clients: &'a Clients,
+}
+
+impl<'a, X> WmState<'a, X>
+where
+    X: XConn,
+{
+    pub(super) fn new(manager: &'a WindowManager<X>) -> Self {
+        Self {
+            conn: &manager.conn,
+            clients: &manager.clients,
+        }
+    }
 }
 
 /// Actions that will be carried out by the [WindowManager][1] in response to individual each
@@ -27,11 +39,14 @@ where
 ///
 /// [1]: crate::core::manager::WindowManager
 /// [2]: crate::core::xconnection::XConn
-#[derive(Debug, Clone)]
+#[non_exhaustive]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[must_use = "Generated event actions must be handled"]
+#[derive(Debug, PartialEq, Eq)]
 pub enum EventAction {
-    /// An X window gained focus
-    ClientFocusLost(Xid),
     /// An X window lost focus
+    ClientFocusLost(Xid),
+    /// An X window gained focus
     ClientFocusGained(Xid),
     /// An X window had its WM_NAME or _NET_WM_NAME property changed
     ClientNameChanged(Xid, bool),
@@ -43,10 +58,16 @@ pub enum EventAction {
     DetectScreens,
     /// A client should have focus
     FocusIn(Xid),
+    /// The workspace on each screen should be layed out again
+    LayoutVisible,
+    /// Layout the workspace at the given index
+    LayoutWorkspace(usize),
     /// A new X window needs to be mapped
     MapWindow(Xid),
     /// A client is requesting to be moved: honoured if the client is floating
     MoveClientIfFloating(Xid, Region),
+    /// The named hook should now be run
+    RunHook(HookName),
     /// A grabbed keybinding was triggered
     RunKeyBinding(KeyCode),
     /// A grabbed mouse state was triggered
@@ -152,7 +173,7 @@ where
         EventAction::SetScreenFromPoint(Some(p.abs)),
     ];
 
-    if let Some(current) = state.focused_client {
+    if let Some(current) = state.clients.focused_client_id() {
         if current != p.id {
             actions.insert(0, EventAction::ClientFocusLost(current));
         }
@@ -172,7 +193,7 @@ fn process_map_request<X>(
 where
     X: XConn,
 {
-    if override_redirect || state.client_map.contains_key(&id) {
+    if override_redirect || state.clients.is_known(id) {
         vec![]
     } else {
         vec![EventAction::MapWindow(id)]
@@ -184,13 +205,12 @@ fn process_property_notify(evt: PropertyEvent) -> Vec<EventAction> {
         Ok(a) if a == Atom::WmName || a == Atom::NetWmName => {
             vec![EventAction::ClientNameChanged(evt.id, evt.is_root)]
         }
-        _ => vec![],
         // TODO: handle other property changes and possibly allow users to process
         //       unknown events?
-        // _ => vec![EventAction::UnknownPropertyChange(
-        //     evt.id,
-        //     evt.atom,
-        //     evt.is_root,
-        // )],
+        _ => vec![EventAction::UnknownPropertyChange(
+            evt.id,
+            evt.atom,
+            evt.is_root,
+        )],
     }
 }

@@ -10,7 +10,7 @@
 //!
 //! Example
 //! ```no_run
-//! # use penrose::__example_helpers::*;
+//! # use penrose::__test_helpers::*;
 //! use penrose::core::hooks::Hooks;
 //! use penrose::draw::{Color, dwm_bar, TextStyle};
 //! use penrose::xcb::{XcbDraw, new_xcb_backed_window_manager};
@@ -48,7 +48,6 @@
 //! ```
 use crate::{
     core::{
-        client::Client,
         data_types::{Region, WinType},
         hooks::Hook,
         manager::WindowManager,
@@ -81,7 +80,7 @@ where
     let highlight = highlight.into();
     let workspaces: Vec<String> = workspaces.into_iter().map(|w| w.into()).collect();
 
-    Ok(StatusBar::try_new(
+    StatusBar::try_new(
         drw,
         Position::Top,
         height,
@@ -109,7 +108,7 @@ where
                 true,
             )),
         ],
-    )?)
+    )
 }
 
 /// The position of a status bar
@@ -130,7 +129,8 @@ where
 {
     drw: D,
     position: Position,
-    widgets: Vec<Box<dyn HookableWidget<X>>>,
+    /// The widgets contained within this status bar
+    pub widgets: Vec<Box<dyn HookableWidget<X>>>,
     screens: Vec<(Xid, f64)>, // window and width
     hpx: usize,
     h: f64,
@@ -340,7 +340,7 @@ __impl_status_bar_as_hook! {
     focus_change => id: Xid;
     layout_applied => workspace_index: usize, screen_index: usize;
     layout_change => workspace_index: usize, screen_index: usize;
-    new_client => id: &mut Client;
+    new_client => id: Xid;
     randr_notify => ;
     remove_client => id: Xid;
     workspace_change => prev: usize, new: usize;

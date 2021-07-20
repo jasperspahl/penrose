@@ -83,8 +83,8 @@ __impl_stub_xcon! {
         }
     }
     conn: {
-        fn mock_is_managed_client(&self, id: Xid) -> bool {
-            !self.unmanaged_ids.contains(&id)
+        fn mock_is_managed_client(&self, c: &Client) -> bool {
+            !self.unmanaged_ids.contains(&c.id())
         }
     }
 }
@@ -127,7 +127,7 @@ __impl_test_hook! {
     focus_change => Xid;
     layout_applied => usize, usize;
     layout_change => usize, usize;
-    new_client => &mut Client;
+    new_client => Xid;
     randr_notify => ;
     remove_client => Xid;
     screen_change => usize;

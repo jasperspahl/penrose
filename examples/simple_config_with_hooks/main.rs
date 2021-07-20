@@ -16,14 +16,13 @@ use penrose::{
         layouts::paper,
     },
     core::{
-        client::Client,
         config::Config,
         helpers::index_selectors,
         hooks::Hook,
         layout::{bottom_stack, side_stack, Layout, LayoutConf},
         manager::WindowManager,
         ring::Selector,
-        xconnection::XConn,
+        xconnection::{XConn, Xid},
     },
     logging_error_handler,
     xcb::{XcbConnection, XcbHooks},
@@ -32,13 +31,16 @@ use penrose::{
 
 use simplelog::{LevelFilter, SimpleLogger};
 use std::collections::HashMap;
+use tracing::info;
 
 // An example of a simple custom hook. In this case we are creating a NewClientHook which will
 // be run each time a new client program is spawned.
 struct MyClientHook {}
 impl<X: XConn> Hook<X> for MyClientHook {
-    fn new_client(&mut self, wm: &mut WindowManager<X>, c: &mut Client) -> Result<()> {
-        wm.log(&format!("new client with WM_CLASS='{}'", c.wm_class()))
+    fn new_client(&mut self, wm: &mut WindowManager<X>, id: Xid) -> Result<()> {
+        let c = wm.client(&Selector::WinId(id)).unwrap();
+        info!("new client with WM_CLASS='{}'", c.wm_class());
+        Ok(())
     }
 }
 
@@ -102,28 +104,28 @@ fn main() -> Result<()> {
      * that they are defined. Hooks may maintain their own internal state which they can use to
      * modify their behaviour if desired.
      */
-    let mut hooks: XcbHooks = vec![];
-    hooks.push(Box::new(MyClientHook {}));
 
-    // Using a simple contrib hook that takes no config. By convention, contrib hooks have a 'new'
-    // method that returns a boxed instance of the hook with any configuration performed so that it
-    // is ready to push onto the corresponding *_hooks vec.
-    hooks.push(LayoutSymbolAsRootName::new());
-
-    // Here we are using a contrib hook that requires configuration to set up a default workspace
-    // on workspace "9". This will set the layout and spawn the supplied programs if we make
-    // workspace "9" active while it has no clients.
-    hooks.push(DefaultWorkspace::new(
-        "9",
-        "[botm]",
-        vec![my_terminal, my_terminal, my_file_manager],
-    ));
-
-    // Scratchpad is an extension: it makes use of the same Hook points as the examples above but
+    // Scratchpad is an extension: it makes use of the same Hook points as the examples below but
     // additionally provides a 'toggle' method that can be bound to a key combination in order to
     // trigger the bound scratchpad client.
     let sp = Scratchpad::new("st", 0.8, 0.8);
-    hooks.push(sp.get_hook());
+
+    let hooks: XcbHooks = vec![
+        Box::new(MyClientHook {}),
+        // Using a simple contrib hook that takes no config. By convention, contrib hooks have a 'new'
+        // method that returns a boxed instance of the hook with any configuration performed so that it
+        // is ready to push onto the corresponding *_hooks vec.
+        LayoutSymbolAsRootName::new(),
+        // Here we are using a contrib hook that requires configuration to set up a default workspace
+        // on workspace "9". This will set the layout and spawn the supplied programs if we make
+        // workspace "9" active while it has no clients.
+        DefaultWorkspace::new(
+            "9",
+            "[botm]",
+            vec![my_terminal, my_terminal, my_file_manager],
+        ),
+        sp.get_hook(),
+    ];
 
     /* The gen_keybindings macro parses user friendly key binding definitions into X keycodes and
      * modifier masks. It uses the 'xmodmap' program to determine your current keymap and create
