@@ -1,15 +1,17 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js ayu">
+<html lang="en" class="ayu" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
         <title>The Penrose Book</title>
-        <meta name="robots" content="noindex" />
+        <meta name="robots" content="noindex">
+
+
         <!-- Custom HTML head -->
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="favicon.svg">
         <link rel="shortcut icon" href="favicon.png">
@@ -17,25 +19,29 @@
         <link rel="stylesheet" href="css/general.css">
         <link rel="stylesheet" href="css/chrome.css">
         <link rel="stylesheet" href="css/print.css" media="print">
+
         <!-- Fonts -->
         <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
         <link rel="stylesheet" href="fonts/fonts.css">
+
         <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
+
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
         <!-- Provide site root to javascript -->
-        <script type="text/javascript">
+        <script>
             var path_to_root = "";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "ayu";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
+        <script>
             try {
                 var theme = localStorage.getItem('mdbook-theme');
                 var sidebar = localStorage.getItem('mdbook-sidebar');
@@ -51,45 +57,76 @@
         </script>
 
         <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
+        <script>
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('ayu')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
 
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
         <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
-            var html = document.querySelector('html');
-            var sidebar = 'hidden';
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
                 <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">User Guide</li><li class="chapter-item expanded "><a href="getting-started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="builtin/index.html"><strong aria-hidden="true">2.</strong> Built In Functionality</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="builtin/layouts.html"><strong aria-hidden="true">2.1.</strong> Layouts</a></li><li class="chapter-item expanded "><a href="builtin/actions.html"><strong aria-hidden="true">2.2.</strong> Actions</a></li><li class="chapter-item expanded "><a href="builtin/ui.html"><strong aria-hidden="true">2.3.</strong> UI</a></li></ol></li><li class="chapter-item expanded "><a href="extensions/index.html"><strong aria-hidden="true">3.</strong> Extensions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="extensions/hooks.html"><strong aria-hidden="true">3.1.</strong> Hooks</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="extensions/startup-hooks.html"><strong aria-hidden="true">3.1.1.</strong> Startup Hooks</a></li><li class="chapter-item expanded "><a href="extensions/event-hooks.html"><strong aria-hidden="true">3.1.2.</strong> Event Hooks</a></li><li class="chapter-item expanded "><a href="extensions/manage-hooks.html"><strong aria-hidden="true">3.1.3.</strong> Manage Hooks</a></li><li class="chapter-item expanded "><a href="extensions/refresh-hooks.html"><strong aria-hidden="true">3.1.4.</strong> Refresh Hooks</a></li></ol></li><li class="chapter-item expanded "><a href="extensions/ewmh.html"><strong aria-hidden="true">3.2.</strong> EWMH</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="overview/index.html"><strong aria-hidden="true">4.</strong> Overview of Concepts</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="overview/pure-vs-x.html"><strong aria-hidden="true">4.1.</strong> Pure Code vs X Code</a></li><li class="chapter-item expanded "><a href="overview/data-structures.html"><strong aria-hidden="true">4.2.</strong> Data Structures</a></li></ol></li><li class="chapter-item expanded "><a href="building/index.html"><strong aria-hidden="true">5.</strong> Building on top of penrose</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="building/actions.html"><strong aria-hidden="true">5.1.</strong> Actions</a></li><li class="chapter-item expanded "><a href="building/layouts.html"><strong aria-hidden="true">5.2.</strong> Layouts</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.3.</strong> Hooks</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.4.</strong> State Extensions</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.5.</strong> Example: Named Scratchpads</div></li></ol></li><li class="chapter-item expanded "><a href="faq.html">FAQs</a></li></ol>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
         </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
 
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
-                <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky bordered">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
@@ -98,7 +135,7 @@
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
                         </ul>
                         <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
                             <i class="fa fa-search"></i>
@@ -111,6 +148,7 @@
                         <a href="print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
+
                     </div>
                 </div>
 
@@ -124,8 +162,9 @@
                         </ul>
                     </div>
                 </div>
+
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
+                <script>
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
                     document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
                     Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
@@ -168,7 +207,7 @@ manager. It's not a pre-built window manager that you then configure via a confi
 terms what that means is that it's time to get our hands dirty with writing some code!</p>
 <h2 id="step-0-getting-set-up-with-rust"><a class="header" href="#step-0-getting-set-up-with-rust">Step 0: Getting set up with Rust</a></h2>
 <p>If you have Rust on your system already, congrats! You can skip this section.</p>
-<p>For everyone else, head on over to <a href="https://www.rust-lang.org/">rust-lang.org</a> and click on the big &quot;Get Started button&quot;
+<p>For everyone else, head on over to <a href="https://www.rust-lang.org/">rust-lang.org</a> and click on the big "Get Started button"
 which will advise you to curl a setup script straight into <strong>sh</strong>. If you'd prefer to see what
 you are about to run, the following should do the trick:</p>
 <pre><code class="language-bash">$ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs &gt; rustup.sh
@@ -182,7 +221,7 @@ $ ./rustup.sh
 </code></pre>
 <p>Now simply sit back and wait for while Rust is installed on your system.</p>
 <h2 id="initialising-your-window-manager-crate"><a class="header" href="#initialising-your-window-manager-crate">Initialising your window manager crate</a></h2>
-<p>&quot;Crates&quot; are Rust's term for what you might be more used to calling a package or project.
+<p>"Crates" are Rust's term for what you might be more used to calling a package or project.
 Either way, for your window manager you are going to want to make a new <em>binary</em> crate like so:</p>
 <pre><code class="language-bash">$ cargo new --bin my_penrose_config
 $ cd my_penrose_config
@@ -194,9 +233,8 @@ $ exa -T  # or just plain old 'ls' if you prefer
 </code></pre>
 <p>If you open up <code>main.rs</code> you should see a simple hello world program:</p>
 <pre><pre class="playground"><code class="language-rust">fn main() {
-    println!(&quot;Hello, world!&quot;);
-}
-</code></pre></pre>
+    println!("Hello, world!");
+}</code></pre></pre>
 <p>We can run this using <code>cargo run</code> to check everything is good to go:</p>
 <pre><code class="language-bash">$ cargo run
    Compiling example v0.1.0 (/home/roger/my_penrose_config)
@@ -218,12 +256,7 @@ what's going on inside as it runs!</p>
 even handles enabling optional features for us (which is handy, because we need to
 do just that with <code>tracing-subscriber</code>):</p>
 <pre><code class="language-bash">$ cargo add tracing-subscriber --features env-filter
-</code></pre>
-<blockquote>
-<p><strong>NOTE</strong>: For now, you will need to add penrose as a git dependency. Once <code>v0.3.0</code> is stable
-you will be able to add it in the same way as shown above for tracing-subscriber.</p>
-</blockquote>
-<pre><code class="language-bash">$ cargo add penrose --git https://github.com/sminez/penrose
+$ cargo add penrose
 </code></pre>
 <p>With that done, we're going to copy the <a href="https://github.com/sminez/penrose/blob/develop/examples/minimal/main.rs">minimal example</a> from the penrose repository in
 GitHub as our window manager. Either copy and paste the contents of the example into your
@@ -239,11 +272,18 @@ $ wget https://raw.githubusercontent.com/sminez/penrose/develop/examples/minimal
 //! has multiple workspaces and simple client / workspace movement.
 use penrose::{
     builtin::{
-        actions::{exit, modify_with, send_layout_message, spawn},
+        actions::{
+            exit,
+            floating::{sink_focused, MouseDragHandler, MouseResizeHandler},
+            modify_with, send_layout_message, spawn,
+        },
         layout::messages::{ExpandMain, IncMain, ShrinkMain},
     },
     core::{
-        bindings::{parse_keybindings_with_xmodmap, KeyEventHandler},
+        bindings::{
+            click_handler, parse_keybindings_with_xmodmap, KeyEventHandler, MouseEventHandler,
+            MouseState,
+        },
         Config, WindowManager,
     },
     map,
@@ -257,33 +297,33 @@ fn raw_key_bindings() -&gt; HashMap&lt;String, Box&lt;dyn KeyEventHandler&lt;Rus
     let mut raw_bindings = map! {
         map_keys: |k: &amp;str| k.to_string();
 
-        &quot;M-j&quot; =&gt; modify_with(|cs| cs.focus_down()),
-        &quot;M-k&quot; =&gt; modify_with(|cs| cs.focus_up()),
-        &quot;M-S-j&quot; =&gt; modify_with(|cs| cs.swap_down()),
-        &quot;M-S-k&quot; =&gt; modify_with(|cs| cs.swap_up()),
-        &quot;M-S-q&quot; =&gt; modify_with(|cs| cs.kill_focused()),
-        &quot;M-Tab&quot; =&gt; modify_with(|cs| cs.toggle_tag()),
-        &quot;M-bracketright&quot; =&gt; modify_with(|cs| cs.next_screen()),
-        &quot;M-bracketleft&quot; =&gt; modify_with(|cs| cs.previous_screen()),
-        &quot;M-grave&quot; =&gt; modify_with(|cs| cs.next_layout()),
-        &quot;M-S-grave&quot; =&gt; modify_with(|cs| cs.previous_layout()),
-        &quot;M-S-Up&quot; =&gt; send_layout_message(|| IncMain(1)),
-        &quot;M-S-Down&quot; =&gt; send_layout_message(|| IncMain(-1)),
-        &quot;M-S-Right&quot; =&gt; send_layout_message(|| ExpandMain),
-        &quot;M-S-Left&quot; =&gt; send_layout_message(|| ShrinkMain),
-        &quot;M-semicolon&quot; =&gt; spawn(&quot;dmenu_run&quot;),
-        &quot;M-Return&quot; =&gt; spawn(&quot;st&quot;),
-        &quot;M-A-Escape&quot; =&gt; exit(),
+        "M-j" =&gt; modify_with(|cs| cs.focus_down()),
+        "M-k" =&gt; modify_with(|cs| cs.focus_up()),
+        "M-S-j" =&gt; modify_with(|cs| cs.swap_down()),
+        "M-S-k" =&gt; modify_with(|cs| cs.swap_up()),
+        "M-S-q" =&gt; modify_with(|cs| cs.kill_focused()),
+        "M-Tab" =&gt; modify_with(|cs| cs.toggle_tag()),
+        "M-bracketright" =&gt; modify_with(|cs| cs.next_screen()),
+        "M-bracketleft" =&gt; modify_with(|cs| cs.previous_screen()),
+        "M-grave" =&gt; modify_with(|cs| cs.next_layout()),
+        "M-S-grave" =&gt; modify_with(|cs| cs.previous_layout()),
+        "M-S-Up" =&gt; send_layout_message(|| IncMain(1)),
+        "M-S-Down" =&gt; send_layout_message(|| IncMain(-1)),
+        "M-S-Right" =&gt; send_layout_message(|| ExpandMain),
+        "M-S-Left" =&gt; send_layout_message(|| ShrinkMain),
+        "M-semicolon" =&gt; spawn("dmenu_run"),
+        "M-Return" =&gt; spawn("st"),
+        "M-A-Escape" =&gt; exit(),
     };
 
-    for tag in &amp;[&quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;, &quot;8&quot;, &quot;9&quot;] {
+    for tag in &amp;["1", "2", "3", "4", "5", "6", "7", "8", "9"] {
         raw_bindings.extend([
             (
-                format!(&quot;M-{tag}&quot;),
+                format!("M-{tag}"),
                 modify_with(move |client_set| client_set.focus_tag(tag)),
             ),
             (
-                format!(&quot;M-S-{tag}&quot;),
+                format!("M-S-{tag}"),
                 modify_with(move |client_set| client_set.move_focused_to_tag(tag)),
             ),
         ]);
@@ -292,15 +332,30 @@ fn raw_key_bindings() -&gt; HashMap&lt;String, Box&lt;dyn KeyEventHandler&lt;Rus
     raw_bindings
 }
 
+fn mouse_bindings() -&gt; HashMap&lt;MouseState, Box&lt;dyn MouseEventHandler&lt;RustConn&gt;&gt;&gt; {
+    use penrose::core::bindings::{
+        ModifierKey::{Meta, Shift},
+        MouseButton::{Left, Middle, Right},
+    };
+
+    map! {
+        map_keys: |(button, modifiers)| MouseState { button, modifiers };
+
+        (Left, vec![Shift, Meta]) =&gt; MouseDragHandler::boxed_default(),
+        (Right, vec![Shift, Meta]) =&gt; MouseResizeHandler::boxed_default(),
+        (Middle, vec![Shift, Meta]) =&gt; click_handler(sink_focused()),
+    }
+}
+
 fn main() -&gt; Result&lt;()&gt; {
     tracing_subscriber::fmt()
-        .with_env_filter(&quot;info&quot;)
+        .with_env_filter("info")
         .finish()
         .init();
 
     let conn = RustConn::new()?;
     let key_bindings = parse_keybindings_with_xmodmap(raw_key_bindings())?;
-    let wm = WindowManager::new(Config::default(), key_bindings, HashMap::new(), conn)?;
+    let wm = WindowManager::new(Config::default(), key_bindings, mouse_bindings(), conn)?;
 
     wm.run()
 }
@@ -314,11 +369,10 @@ mod tests {
         let res = parse_keybindings_with_xmodmap(raw_key_bindings());
 
         if let Err(e) = res {
-            panic!(&quot;{e}&quot;);
+            panic!("{e}");
         }
     }
-}
-</code></pre></pre>
+}</code></pre></pre>
 <h3 id="checking-were-good-to-go"><a class="header" href="#checking-were-good-to-go">Checking we're good to go</a></h3>
 <p>Hopefully you've spotted that the end of the example includes a test. Now, it's entirely up
 to you whether or not you keep (and run) the test but it's highly recommended that you do.
@@ -358,16 +412,16 @@ in your <code>~/.xinitrc</code>:</p>
 </code></pre>
 <p>Then, you can simply type <code>startx</code> after logging in and your window manager will start up, with the
 log output available in my your home directory as <code>.penrose.log</code>!</p>
-<p>If logging in and starting your graphical session from a TTY is &quot;too hipster&quot; for you (which, lets be
-honest, it is), you might want to look at installing and running a <a href="https://wiki.archlinux.org/title/Display_manager#Run_%7E/.xinitrc_as_a_session">display manager</a> and using
-something like <a href="https://wiki.archlinux.org/title/Display_manager#Run_%7E/.xinitrc_as_a_session">xinit-session</a> to make this a little nicer. Alternatively, dropping something like
+<p>If logging in and starting your graphical session from a TTY is "too hipster" for you (which, lets be
+honest, it is), you might want to look at installing and running a <a href="https://wiki.archlinux.org/title/Display_manager#Run_~/.xinitrc_as_a_session">display manager</a> and using
+something like <a href="https://wiki.archlinux.org/title/Display_manager#Run_~/.xinitrc_as_a_session">xinit-session</a> to make this a little nicer. Alternatively, dropping something like
 the following into <code>/usr/share/xsessions</code> should also do the trick. The <a href="https://wiki.archlinux.org/title/Display_manager#Session_configuration">arch wiki</a> is a fantastic
 place to read up on how to do these sorts of things whether you use Arch Linux or not.</p>
 <pre><code class="language-desktop">[Desktop Entry]
 Version=1.0
 Name=Penrose Session
 Comment=Use this session to run penrose as your desktop environment
-Exec=/home/roger/my_penrose_config/target/release/my_penrose_config &amp;&gt; ~/.penrose.log
+Exec=sh -c "/home/roger/my_penrose_config/target/release/my_penrose_config &amp;&gt; ~/.penrose.log"
 Icon=
 Type=Application
 DesktopNames=Penrose
@@ -430,7 +484,7 @@ have been applied which may reduce the space available for the window.</p>
 </code></pre>
 <p>The default and primary layout for penrose is the <code>MainAndStack</code> which is a slight
 generalisation of the default <code>tiled</code> layout from xmonad. There are several ways
-to set it up but the common theme is the idea of a &quot;main&quot; area and stack (or
+to set it up but the common theme is the idea of a "main" area and stack (or
 secondary) area that contains the windows that are not the current focus of what
 you are doing. The number of windows allowed in the main area can be changed using
 messages as can the proportions of the screen assigned to each area.</p>
@@ -438,6 +492,49 @@ messages as can the proportions of the screen assigned to each area.</p>
 right, top or bottom of the screen. There are also a couple of <code>Messages</code> that can
 be sent to switch between the different behaviours if you want to modify a single
 layout rather than register several different ones.</p>
+<h3 id="centered-main"><a class="header" href="#centered-main">Centered Main</a></h3>
+<pre><code>+-----------+-----------+
+|           |           |
+|           |           |
++-----------+-----------+
+|                       |
+|                       |
++-----------+-----------+
+|           |           |
+|           |           |
++-----------+-----------+
+</code></pre>
+<p>There is also a modified version of the <code>MainAndStack</code> layout called <code>CenteredMain</code>
+which provides two secondary areas, one either side of the main area. As with its
+counterpart, you can rotate between having the secondary areas to the side or above
+and below the main area by sending a <code>Rotate Message</code></p>
+<h3 id="grid"><a class="header" href="#grid">Grid</a></h3>
+<pre><code>+-------+-------+-------+
+|       |       |       |
+|       |       |       |
++-------+-------+-------+
+|       |       |       |
+|       |       |       |
++-------+-------+-------+
+|       |       |       |
+|       |       |       |
++-------+-------+-------+
+</code></pre>
+<p>The <code>Grid</code> layout will tile windows in the smallest <strong>nxn</strong> grid that can hold the
+number of windows present on the workspace.</p>
+<p>Please be aware that if there are not a square number of windows to be tiled, this
+layout will leave gaps:</p>
+<pre><code>+-------+-------+-------+
+|       |       |       |
+|       |       |       |
++-------+-------+-------+
+|       |       |       |
+|       |       |       |
++-------+-------+-------+
+|       |       |
+|       |       |
++-------+-------+
+</code></pre>
 <h2 id="messages"><a class="header" href="#messages">Messages</a></h2>
 <p>As mentioned above, there are a handful of built in messages that work with the
 <code>MainAndStack</code> layout which are also generally applicable to other layouts with a
@@ -524,14 +621,13 @@ use penrose_ui::bar::widgets::{RefreshText, TextStyle};
 
 pub fn current_date_and_time(style: &amp;TextStyle) -&gt; RefreshText {
     RefreshText::new(style, || {
-        spawn_for_output_with_args(&quot;date&quot;, &amp;[&quot;+%F %R&quot;])
+        spawn_for_output_with_args("date", &amp;["+%F %R"])
             .unwrap_or_default()
             .trim()
             .to_string()
     })
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="built-in-widgets"><a class="header" href="#built-in-widgets">Built in widgets</a></h2>
 <h3 id="workspaces"><a class="header" href="#workspaces">Workspaces</a></h3>
 <p>The <a href="https://sminez.github.io/penrose/rustdoc/penrose_ui/bar/widgets/struct.Workspaces.html">Workspaces</a> widget is the most complicated built in widget on offer. It checks the
@@ -552,7 +648,7 @@ tool can be used to set the root window name to whatever string you like and typ
 this is used by spawning a shell script that updates the root window name with system
 stats on an interval:</p>
 <pre><code class="language-sh"># Set the root window name to the current date and time
-$ xsetroot -name &quot;$(date '+%F %R')&quot;
+$ xsetroot -name "$(date '+%F %R')"
 </code></pre>
 <h3 id="activewindowname"><a class="header" href="#activewindowname">ActiveWindowName</a></h3>
 <p>In a similar way, <a href="https://sminez.github.io/penrose/rustdoc/penrose_ui/bar/widgets/struct.ActiveWindowName.html">ActiveWindowName</a> will display the title of the currently focused
@@ -622,7 +718,7 @@ the window manager is refreshed and rendered to the X server. This is one of the
 for you to make use of and can be used to run code any time something changes in the internal state of your window
 manager.</p>
 <blockquote>
-<p><strong>NOTE</strong>: Xmonad refers to this as a &quot;Log Hook&quot; which I find a little confusing. The name comes from the fact that
+<p><strong>NOTE</strong>: Xmonad refers to this as a "Log Hook" which I find a little confusing. The name comes from the fact that
 one of the main use cases is to log the internal state of the window manager in order to update a status bar, which
 makes sense but I prefer naming the hooks for where they are called in the event handling flow.</p>
 </blockquote>
@@ -649,8 +745,7 @@ server. In simplified rust code, it looks something like this:</p>
         // for each event type run the appropriate handler
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>There's obviously more to it than that, but this is a pretty good starting point for how to think about
 your window manager. Penrose provides a number of different ways to modify how the default handling
 of events behaves and for running custom code in response to key presses. The pages in this section of
@@ -662,13 +757,13 @@ the book each cover (at a relatively high level) what the moving parts that make
 namely that you need an X server running in order to run code that talks to an X server... The approach
 penrose takes to solving this issue (primarily for being able to write tests) is shamelessly stolen
 from Xmonad: split the code base in two.</p>
-<p>On one side we have &quot;pure&quot; rust code that manipulates internal data structures representing the logical
+<p>On one side we have "pure" rust code that manipulates internal data structures representing the logical
 state of the window manager (known clients, which screen they are on, where on that screen they are
 positioned etc) and on the other side we have code that submits requests to (and receives events from)
 the X server. The two sides meet inside of the <code>modify_and_refresh</code> method of the <code>XConnExt</code> trait.</p>
 <h3 id="working-with-diffs"><a class="header" href="#working-with-diffs">Working with diffs</a></h3>
 <p>The primary way that most X actions are generated by penrose is through this <code>modify_and_refresh</code> method.
-It computes a diff of the &quot;pure&quot; window manager state before and after some mutating operation in order
+It computes a diff of the "pure" window manager state before and after some mutating operation in order
 to determine what changes need to be reflected in the X server state. For example:</p>
 <ul>
 <li>Focus has moved to a new window</li>
@@ -696,7 +791,7 @@ to check (or set) a property on a client window for example. In those cases, you
 perform. Internally, penrose tracks a snapshot of the previous pure state each time a refresh takes
 place so you always have <em>something</em> to compute the diff against.</p>
 <blockquote>
-<p>Just be careful to remember that none of the pure state changes will be reflected in the &quot;real&quot;
+<p>Just be careful to remember that none of the pure state changes will be reflected in the "real"
 X server state until a refresh takes place! Depending on how complicated your logic is you may
 need multiple refreshes to get what you are after (but if you find yourself doing this it's
 probably an indicator that you should raise an issue in GitHub to see if there is a simpler
@@ -712,15 +807,15 @@ various methods associated with each data structure: for that it's best to read 
 we'll take a quick look at what each data structure does and how you can make use of it when writing your own
 penrose based window manager.</p>
 <p>Most of the data structures outlines below are some form of <a href="https://en.wikipedia.org/wiki/Zipper_(data_structure)">zipper</a> (or some meta-data wrapped around a zipper).
-If the Wikipedia page all looks a bit &quot;computer science-y&quot; to you then you can get by pretty well by thinking of
-a zipper as collection type (like a list or a tree) that has an added concept of &quot;focus&quot; (that is, &quot;the element
-of the collection we are currently looking at&quot;). There is a really nice article about <a href="https://donsbot.com/2007/05/17/roll-your-own-window-manager-tracking-focus-with-a-zipper/">the use of zippers in Xmonad</a>
+If the Wikipedia page all looks a bit "computer science-y" to you then you can get by pretty well by thinking of
+a zipper as collection type (like a list or a tree) that has an added concept of "focus" (that is, "the element
+of the collection we are currently looking at"). There is a really nice article about <a href="https://donsbot.com/2007/05/17/roll-your-own-window-manager-tracking-focus-with-a-zipper/">the use of zippers in Xmonad</a>
 which is worth a read if you have the time. It covers the starting point for the use of zippers in penrose and
 also shows where all of the names come from(!) Penrose takes the idea a little further than what is seen in
 Xmonad in order to provide what I think is a nicer API to work with (but I'll let you be the judge of that).</p>
-<p>First up, the arguably incorrectly named &quot;Stack&quot;.</p>
+<p>First up, the arguably incorrectly named "Stack".</p>
 <h3 id="stacks"><a class="header" href="#stacks">Stacks</a></h3>
-<p>So called because it (primarily) represents the X &quot;window stack&quot; for the current screen you are looking at. Getting
+<p>So called because it (primarily) represents the X "window stack" for the current screen you are looking at. Getting
 technical for a minute, a <code>Stack</code> is a zipper over a <a href="https://doc.rust-lang.org/std/collections/struct.LinkedList.html">doubly-linked list</a> that has a couple of nice properties
 that help to simplify how a lot of the rest of the code in penrose is written:</p>
 <ol>
@@ -751,8 +846,7 @@ Rust type wise, a workspace look like this (the fields on a real <code>Workspace
     layouts: Stack&lt;Layout&gt;,
     stack: Option&lt;Stack&lt;Xid&gt;&gt;,
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>The <code>id</code> and <code>tag</code> fields are used to identify workspaces within the larger pure state: useful, but not particularly
 interesting. The client <code>Stack</code> itself is wrapped in an Option because (like we mentioned above) there is no such
 thing as an empty <code>Stack</code>, so a <code>Workspace</code> with no windows has <code>None</code>. Running operations on the stack contained in
@@ -762,8 +856,8 @@ workspace. There must be at least one layout available (so no <code>Option&lt;St
 in the stack is the one that will be used to position windows when this workspace is placed on a given screen.</p>
 <p>Speaking of which...</p>
 <h3 id="screens"><a class="header" href="#screens">Screens</a></h3>
-<p>If you thought a <code>Workspace</code> was pretty much &quot;a window Stack with a fancy hat&quot;, then a <code>Screen</code> is &quot;a Workspace in a
-box&quot;.</p>
+<p>If you thought a <code>Workspace</code> was pretty much "a window Stack with a fancy hat", then a <code>Screen</code> is "a Workspace in a
+box".</p>
 <p>A 2D box to be precise.</p>
 <p>For the purposes of our pure state, all we care about when it comes to the physical screens we have to play with are:</p>
 <ul>
@@ -781,7 +875,7 @@ coordinates of its top left corner along with its width and height. Not <em>mass
 worth taking a look at the docs on the <code>Rect</code> struct to see what methods are available for slicing, dicing, positioning
 and comparing Rects while you write your custom Layout algorithms and extensions.</p>
 <h3 id="the-stackset"><a class="header" href="#the-stackset">The StackSet</a></h3>
-<p>And last but by no means least, we have the <code>StackSet</code>. It's a <em>little</em> &quot;set-y&quot; when you break it down so that's what
+<p>And last but by no means least, we have the <code>StackSet</code>. It's a <em>little</em> "set-y" when you break it down so that's what
 we're going for name wise until someone gives me something better (it's definitely a lot <em>more</em> like a set than the
 original from Xmonad in my opinion but we'll get to that in a second).</p>
 <p>Ignoring several book-keeping fields which we maintain for quality of life purposes, the Rust type looks something like
@@ -793,15 +887,14 @@ this:</p>
     hidden: LinkedList&lt;Workspace&gt;,
     // and some book-keeping...
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>I'm not quite sure how best to describe what's going on here in terms of Zippers as it's a <em>little</em> bit of an abuse of
-the concept but, if you squint hard enough, what you're looking at is pretty much a &quot;Stack of Stacks&quot;. Albeit with a
+the concept but, if you squint hard enough, what you're looking at is pretty much a "Stack of Stacks". Albeit with a
 healthy sprinkling of meta-data throughout and the fact that for the unfocused elements we don't care about their order
 (hence the <a href="https://en.wikipedia.org/wiki/Set_(mathematics)">set</a> based name).</p>
 <p>If you think back to what we said a <code>Zipper</code> was, we said we had some collection of elements along with the idea of there
-being a &quot;focus point&quot; that picks out an element from that collection. For the <code>StackSet</code>, the collection is a set of
-<code>Workpsaces</code>, and the &quot;focus&quot; is actually a <code>Stack</code> of <code>Screens</code> and their <em>associated</em> <code>Workspaces</code>.</p>
+being a "focus point" that picks out an element from that collection. For the <code>StackSet</code>, the collection is a set of
+<code>Workpsaces</code>, and the "focus" is actually a <code>Stack</code> of <code>Screens</code> and their <em>associated</em> <code>Workspaces</code>.</p>
 <p>...still with me?</p>
 <p>If you think about what we care about when managing windows, we can break things down into the following:</p>
 <ul>
@@ -818,13 +911,13 @@ screen.</p>
 <p>We <em>could</em> use a <code>HashSet</code> but then we'd need Workspaces to be hashable and it doesn't actually buy us much in terms
 of the API we end up with.</p>
 </blockquote>
-<p>Having the focused &quot;element&quot; be another level of wrapping around <em>multiple</em> element from the collection really pushes
+<p>Having the focused "element" be another level of wrapping around <em>multiple</em> element from the collection really pushes
 the definiton of a Zipper I suspect but it works pretty nicely all things considered. We can then fully manage the
 on screen position and stack position of each window and manipulate groups of windows based on the workspace they are
 part of.</p>
 <p>Nice.</p>
 <h3 id="and-thats-it"><a class="header" href="#and-thats-it">And that's it!</a></h3>
-<p>Admittedly, &quot;it&quot; is a rather large set of methods on a <code>StackSet</code> but it gives you a rich, zipper based API for manipulating
+<p>Admittedly, "it" is a rather large set of methods on a <code>StackSet</code> but it gives you a rich, zipper based API for manipulating
 your windows which handles all of the focus book-keeping for you. To really understand everything that is possible with
 the API it is best to dive into the docs.rs docs and try things out for yourself. The <em>real</em> structs are generic rather
 than having to contain <code>Xids</code> as shown in the pseudo-code above so feel free to pull in penrose as a dependency and start
@@ -858,8 +951,7 @@ a look at the <a href="https://sminez.github.io/penrose/rustdoc/penrose/core/bin
 </span>pub trait KeyEventHandler&lt;X: XConn&gt; {
     fn call(&amp;mut self, state: &amp;mut State&lt;X&gt;, x: &amp;X) -&gt; Result&lt;()&gt;;
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>There's not much to it: you are given mutable access to the window manager <code>State</code> and a reference to
 the X connection. From there you can do pretty much whatever you like other than return data (we'll
 take a look at how you can persist and manage your own state in a bit!)</p>
@@ -892,17 +984,17 @@ use std::process::exit;
 
 pub fn power_menu&lt;X: XConn&gt;() -&gt; KeyEventHandler&lt;X&gt; {
     key_handler(|state, _| {
-        let options = vec![&quot;lock&quot;, &quot;logout&quot;, &quot;restart-wm&quot;, &quot;shutdown&quot;, &quot;reboot&quot;];
-        let menu = DMenu::new(&quot;&gt;&gt;&gt; &quot;, options, DMenuConfig::default());
+        let options = vec!["lock", "logout", "restart-wm", "shutdown", "reboot"];
+        let menu = DMenu::new("&gt;&gt;&gt; ", options, DMenuConfig::default());
         let screen_index = state.client_set.current_screen().index();
 
         if let Ok(MenuMatch::Line(_, choice)) = menu.run(screen_index) {
             match choice.as_ref() {
-                &quot;lock&quot; =&gt; spawn(&quot;xflock4&quot;),
-                &quot;logout&quot; =&gt; spawn(&quot;pkill -fi penrose&quot;),
-                &quot;shutdown&quot; =&gt; spawn(&quot;sudo shutdown -h now&quot;),
-                &quot;reboot&quot; =&gt; spawn(&quot;sudo reboot&quot;),
-                &quot;restart-wm&quot; =&gt; exit(0), // Wrapper script then handles restarting us
+                "lock" =&gt; spawn("xflock4"),
+                "logout" =&gt; spawn("pkill -fi penrose"),
+                "shutdown" =&gt; spawn("sudo shutdown -h now"),
+                "reboot" =&gt; spawn("sudo reboot"),
+                "restart-wm" =&gt; exit(0), // Wrapper script then handles restarting us
                 _ =&gt; unimplemented!(),
             }
         } else {
@@ -910,8 +1002,7 @@ pub fn power_menu&lt;X: XConn&gt;() -&gt; KeyEventHandler&lt;X&gt; {
         }
     })
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>The window manager state is used to determine the current screen (where we want to open dmenu)
 but other than that we're running completely arbitrary code in response to a keypress. The main
 thing to keep in mind is that penrose is <em>single threaded</em> so anything you do in an action must
@@ -921,7 +1012,7 @@ complete in order for the event loop to continue running.</p>
 to reposition and select windows on the screen. There are <a href="https://sminez.github.io/penrose/rustdoc/penrose/pure/struct.StackSet.html">a large number of methods</a> available
 for modifying the current state of your windows and the <a href="https://sminez.github.io/penrose/rustdoc/penrose/builtin/actions/fn.modify_with.html">modify_with</a> helper gives you an
 easy way to call them directly. If you think back to the minimal example window manager we covered
-in the &quot;getting started&quot; section, we saw this in use for most of the key bindings. Paraphrasing
+in the "getting started" section, we saw this in use for most of the key bindings. Paraphrasing
 a little, it looks like this:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -932,8 +1023,7 @@ modify_with(|cs| cs.next_layout());
 
 // Close the currently focused window
 modify_with(|cs| cs.kill_focused());
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><p><image width="50px" src="https://raw.githubusercontent.com/sminez/penrose/develop/icon.svg" align="left"></image></p>
 <h1 id="layouts-2"><a class="header" href="#layouts-2">Layouts</a></h1>
 <p>Layouts are (lets face it) a large part of why people use a dynamic tiling window manager in the first place.
@@ -974,9 +1064,8 @@ customisation you want to give the user while the window manager is running:</p>
 
     fn handle_message(&amp;mut self, m: &amp;Message) -&gt; Option&lt;Box&lt;dyn Layout&gt;&gt;;
 }
-<span class="boring">}
-</span></code></pre></pre>
-<p>On the &quot;laying out windows&quot; front (you know, the main one) you have three choices:</p>
+<span class="boring">}</span></code></pre></pre>
+<p>On the "laying out windows" front (you know, the main one) you have three choices:</p>
 <ul>
 <li>Specify how to layout a possibly empty workspace based on the specific tag being laid out</li>
 <li>Specify how to layout a given (non-empty) stack of clients for any workspace</li>
@@ -1011,7 +1100,7 @@ pub struct Monocle;
 
 impl Layout for Monocle {
     fn name(&amp;self) -&gt; String {
-        &quot;Mono&quot;.to_owned()
+        "Mono".to_owned()
     }
 
     fn boxed_clone(&amp;self) -&gt; Box&lt;dyn Layout&gt; {
@@ -1026,13 +1115,12 @@ impl Layout for Monocle {
         None
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Pretty simple right? Admittedly, this is about as simple as you can make it (the focused window gets the
 full screen and everything else gets unmapped) but the overall boilerplate is kept to a minimum, which
 is nice.</p>
 <blockquote>
-<p><strong>NOTE</strong>: The <code>builtin</code> module has some good examples of what a &quot;real&quot; layout looks like (not to dunk
+<p><strong>NOTE</strong>: The <code>builtin</code> module has some good examples of what a "real" layout looks like (not to dunk
 on <code>Monocle</code> but...come on). Why not take a look at <code>MainAndStack</code> as a starting point for how to write
 something a little more interesting?</p>
 </blockquote>
@@ -1057,8 +1145,7 @@ can be <a href="https://doc.rust-lang.org/std/any/trait.Any.html">literally anyt
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>impl IntoMessage for MyMessage {}
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>What any given message actually <em>does</em> is entirely at the discression of the <code>Layout</code> that handles it. So far,
 so vague...lets take a look at an example:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
@@ -1088,8 +1175,7 @@ impl Layout for MyLayout {
         None
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>The <code>downcast_ref</code> method is the thing to pay attention to here: this is how we go from a <code>Message</code> (really just
 a wrapper around the standard library <code>Any</code> trait) to a concrete type. Anything that implements <code>IntoMessage</code>
 can be sent to our Layout so we do our own type checking to see if the message is something we care about. Messages
@@ -1112,7 +1198,7 @@ impl Layout for MyAwesomeLayout {
 
 const AWESOMENESS_THRESHOLD: usize = 42;
 
-// Now, we modify our impl for MyLayout to &quot;level up&quot; once we hit the threshold
+// Now, we modify our impl for MyLayout to "level up" once we hit the threshold
 impl Layout for MyLayout {
     // TODO: still need to write the layout at some point...
 
@@ -1130,8 +1216,7 @@ impl Layout for MyLayout {
         None
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Nice!</p>
 <p>That's all well and good if we have a bunch of our own layouts that we can write and swap between, but what if we
 just want to <em>tweak</em> an existing layout a bit? Well that's where we move over to the wonderful world of
@@ -1159,9 +1244,8 @@ fn my_transformer(r: Rect, positions: Vec&lt;(Xid, Rect)&gt;) -&gt; Vec&lt;(Xid,
     // Write your transformation implementation here
 }
 
-simple_transformer!(&quot;MyTransform&quot;, MyTransformer, my_transformer);
-<span class="boring">}
-</span></code></pre></pre>
+simple_transformer!("MyTransform", MyTransformer, my_transformer);
+<span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><p><image width="50px" src="https://raw.githubusercontent.com/sminez/penrose/develop/icon.svg" align="left"></image></p>
 <h1 id="penrose-faqs"><a class="header" href="#penrose-faqs">Penrose FAQs</a></h1>
 <h2 id="how-do-i-install-penrose"><a class="header" href="#how-do-i-install-penrose">How do I install Penrose?</a></h2>
@@ -1211,13 +1295,15 @@ animation are not first class citizens but can be added through extensions and
 user code if desired.
 <br><br></p>
 <h2 id="are-you-accepting-contributions-for-open-issues"><a class="header" href="#are-you-accepting-contributions-for-open-issues">Are you accepting contributions for open issues?</a></h2>
-<p>Short answer: yes!</p>
+<p>Short answer: please discuss on the issue in question</p>
 <p>Long answer:</p>
-<p>Any issues marked with <code>good first issue</code> should have sufficient detail to
-allow you to get started working with the current state of develop. Please
-comment on the issue asking to pick it up before starting work and I can assign
-it to you. Depending on how old the issue is, it may need to be updated before
-you can get going.
+<p>Typically issues in the GitHub issue tracker are already being worked on or are
+blocked for some particular reason that should be clear from the issue. If you
+would like to work on an open issue that looks to be stalled please add a
+comment to the issue in question registering your interest.</p>
+<p>If you would like to raise a bug report or make a feature request then please
+open a new issue and get confirmation that the change / approach to the fix is
+somethat that is likely to be accepted before starting work.
 <br><br></p>
 <h3 id="can-i-raise-a-pull-request-adding-a-shiny-new-feature"><a class="header" href="#can-i-raise-a-pull-request-adding-a-shiny-new-feature">Can I raise a Pull Request adding a shiny new feature?</a></h3>
 <p>Short answer: please raise an issue first to discuss what it is you want to add.</p>
@@ -1243,7 +1329,7 @@ been written to be a base layer that you can build from to write a window
 manager that works how you want it to: this means that there is a small set of
 opinionated, core functionality and then a variety of ways to extend this. There
 are likely a few pieces of functionality that I have missed that <em>can</em> be added
-to core without disrupting what is already there, but most &quot;missing&quot; features
+to core without disrupting what is already there, but most "missing" features
 from other window managers are missing on purpose. If you would like to add them
 as an extension, please see the contribution guidelines above.</p>
 <p>One important category of functionality that will not be added to the core of the
@@ -1257,31 +1343,43 @@ not something you want to manage and maintain, then <code>penrose</code> is not 
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+
+
                         <div style="clear: both"></div>
                     </nav>
                 </div>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
             </nav>
 
         </div>
 
-        <script type="text/javascript">
+
+
+
+        <script>
             window.playground_copyable = true;
         </script>
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
 
         <!-- Custom JS scripts -->
-        <script type="text/javascript">
+
+        <script>
         window.addEventListener('load', function() {
             window.setTimeout(window.print, 100);
         });
         </script>
+
+    </div>
     </body>
 </html>
