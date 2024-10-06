@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/x/mod.rs`."><title>mod.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-081576b923113409.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="penrose" data-themes="" data-resource-suffix="" data-rustdoc-version="1.79.0 (129f3b996 2024-06-10)" data-channel="1.79.0" data-search-js="search-bf21c90c8c1d92b1.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-e32f0c247825364d.js"></script><script defer src="../../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-09095024cf37855e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../../penrose/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Type ‘S’ or ‘/’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings">Settings</a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/x/mod.rs`."><title>mod.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-c5d6553a23f1e5a6.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="penrose" data-themes="" data-resource-suffix="" data-rustdoc-version="1.81.0 (eeb90cda1 2024-09-04)" data-channel="1.81.0" data-search-js="search-d234aafac6c221dd.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-d2fab2bf619172d3.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -712,6 +712,18 @@
 <a href="#712" id="712">712</a>
 <a href="#713" id="713">713</a>
 <a href="#714" id="714">714</a>
+<a href="#715" id="715">715</a>
+<a href="#716" id="716">716</a>
+<a href="#717" id="717">717</a>
+<a href="#718" id="718">718</a>
+<a href="#719" id="719">719</a>
+<a href="#720" id="720">720</a>
+<a href="#721" id="721">721</a>
+<a href="#722" id="722">722</a>
+<a href="#723" id="723">723</a>
+<a href="#724" id="724">724</a>
+<a href="#725" id="725">725</a>
+<a href="#726" id="726">726</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Logic for interacting with the X server
 </span><span class="kw">use crate</span>::{
     builtin::layout::messages::Hide,
@@ -726,7 +738,7 @@
 <span class="attr">#[cfg(feature = <span class="string">"serde"</span>)]
 </span><span class="kw">use </span>serde::{Deserialize, Serialize};
 <span class="kw">use </span>std::collections::{HashMap, HashSet};
-<span class="kw">use </span>tracing::{error, trace};
+<span class="kw">use </span>tracing::{debug, error, trace};
 
 <span class="kw">pub mod </span>atom;
 <span class="kw">pub mod </span>event;
@@ -972,20 +984,21 @@
         <span class="macro">trace!</span>(%client, <span class="string">"fetching WmClass prop"</span>);
         <span class="kw">if let </span><span class="prelude-val">Some</span>(Prop::UTF8String(strs)) = <span class="self">self</span>.get_prop(client, Atom::WmClass.as_ref())<span class="question-mark">? </span>{
             <span class="kw">if </span>strs.iter().any(|c| floating_classes.contains(c)) {
-                <span class="macro">trace!</span>(%client, <span class="question-mark">?</span>floating_classes, <span class="string">"window has a floating class: setting to floating state"</span>);
+                <span class="macro">debug!</span>(%client, <span class="question-mark">?</span>floating_classes, <span class="string">"window has a floating class: setting to floating state"</span>);
                 <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="bool-val">true</span>);
             }
         }
 
+        <span class="macro">trace!</span>(%client, <span class="string">"fetching NetWmWindowType prop"</span>);
+        <span class="kw">let </span>window_types = <span class="self">self</span>.get_prop(client, Atom::NetWmWindowType.as_ref())<span class="question-mark">?</span>;
+        <span class="macro">debug!</span>(<span class="question-mark">?</span>window_types, <span class="string">"client window types"</span>);
+
         <span class="kw">let </span>float_types: Vec&lt;<span class="kw-2">&amp;</span>str&gt; = AUTO_FLOAT_WINDOW_TYPES.iter().map(|a| a.as_ref()).collect();
 
-        <span class="macro">trace!</span>(%client, <span class="string">"fetching NetWmWindowType prop"</span>);
-        <span class="kw">let </span>p = <span class="self">self</span>.get_prop(client, Atom::NetWmWindowType.as_ref())<span class="question-mark">?</span>;
-        <span class="kw">let </span>should_float = <span class="kw">if let </span><span class="prelude-val">Some</span>(Prop::Atom(atoms)) = p {
-            atoms.iter().any(|a| float_types.contains(<span class="kw-2">&amp;</span>a.as_ref()))
-        } <span class="kw">else </span>{
-            <span class="bool-val">false
-        </span>};
+        <span class="kw">let </span>should_float = <span class="kw">match </span>window_types {
+            <span class="prelude-val">Some</span>(Prop::Atom(atoms)) =&gt; atoms.iter().any(|a| float_types.contains(<span class="kw-2">&amp;</span>a.as_ref())),
+            <span class="kw">_ </span>=&gt; <span class="bool-val">false</span>,
+        };
 
         <span class="prelude-val">Ok</span>(should_float)
     }
@@ -1173,6 +1186,7 @@
                 .or(tag)
                 .map(|t| t.to_string());
 
+            <span class="macro">debug!</span>(%id, %parent, <span class="question-mark">?</span>owned_tag, <span class="string">"client is transient"</span>);
             (owned_tag, <span class="prelude-val">Some</span>(parent))
         }
 
@@ -1188,6 +1202,7 @@
     }
 
     <span class="kw">if </span>should_float {
+        <span class="macro">debug!</span>(%id, <span class="string">"client should float"</span>);
         <span class="kw">let </span>r = floating_client_position(id, transient_for, state, x)<span class="question-mark">?</span>;
         <span class="kw">if </span>state.client_set.float(id, r).is_err() {
             <span class="macro">error!</span>(%id, <span class="string">"attempted to float client which was not in state"</span>);
@@ -1203,6 +1218,10 @@
     }
     state.config.manage_hook = hook;
 
+    <span class="macro">debug!</span>(
+        floating=<span class="question-mark">?</span>state.client_set.floating, <span class="string">"floating clients"
+    </span>);
+
     <span class="prelude-val">Ok</span>(())
 }
 
@@ -1216,22 +1235,27 @@
     state: <span class="kw-2">&amp;</span>State&lt;X&gt;,
     x: <span class="kw-2">&amp;</span>X,
 ) -&gt; <span class="prelude-ty">Result</span>&lt;Rect&gt; {
+    <span class="macro">trace!</span>(%id, <span class="string">"fetching client geometry"</span>);
     <span class="kw">let </span>r_initial = x.client_geometry(id)<span class="question-mark">?</span>;
+    <span class="macro">debug!</span>(<span class="question-mark">?</span>r_initial, <span class="string">"initial geometry"</span>);
 
     <span class="kw">if </span>(r_initial.x, r_initial.y) != (<span class="number">0</span>, <span class="number">0</span>) {
+        <span class="macro">debug!</span>(<span class="question-mark">?</span>r_initial, <span class="string">"accepting client's requested position"</span>);
         <span class="kw">return </span><span class="prelude-val">Ok</span>(r_initial);
     }
 
-    <span class="kw">let </span>r_screen = transient_for
+    <span class="kw">let </span>r_parent = transient_for
         .and_then(|parent| state.client_set.screen_for_client(<span class="kw-2">&amp;</span>parent))
         .unwrap_or(<span class="kw-2">&amp;</span>state.client_set.screens.focus)
         .r;
+    <span class="macro">debug!</span>(<span class="question-mark">?</span>r_parent, <span class="string">"parent geometry"</span>);
 
-    <span class="kw">let </span>r_final = r_initial.centered_in(<span class="kw-2">&amp;</span>r_screen).unwrap_or_else(|| {
+    <span class="kw">let </span>r_final = r_initial.centered_in(<span class="kw-2">&amp;</span>r_parent).unwrap_or_else(|| {
         r_initial
             .centered_in(<span class="kw-2">&amp;</span>state.client_set.screens.focus.r)
             .unwrap_or(r_initial)
     });
+    <span class="macro">debug!</span>(<span class="question-mark">?</span>r_final, <span class="string">"final geometry"</span>);
 
     <span class="prelude-val">Ok</span>(r_final)
 }
